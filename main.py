@@ -16,6 +16,21 @@ def calculate(u, gamma, max_iter_time, plate_length, delta_x):
     return u
 
 
+def plotheatmap(u_k, k, delta_t):
+    # Clear the current plot figure
+    plt.clf()
+
+    plt.title(f"Temperature at t = {k*delta_t:.3f} unit time")
+    plt.xlabel("x")
+    plt.ylabel("y")
+
+    # This is to plot u_k (u at time-step k)
+    plt.pcolormesh(u_k, cmap=plt.cm.jet, vmin=0, vmax=100)
+    plt.colorbar()
+
+    return plt
+
+
 if __name__ == '__main__':
     plate_length = 100
     max_iter_time = 750
@@ -47,19 +62,6 @@ if __name__ == '__main__':
     u[:, :1, 1:] = u_bottom
     u[:, :, (plate_length-1):] = u_right
 
-    def plotheatmap(u_k, k):
-        # Clear the current plot figure
-        plt.clf()
-
-        plt.title(f"Temperature at t = {k*delta_t:.3f} unit time")
-        plt.xlabel("x")
-        plt.ylabel("y")
-
-        # This is to plot u_k (u at time-step k)
-        plt.pcolormesh(u_k, cmap=plt.cm.jet, vmin=0, vmax=100)
-        plt.colorbar()
-
-        return plt
 
     # Do the calculation here
     u = calculate(u, gamma, max_iter_time, plate_length, delta_x)
