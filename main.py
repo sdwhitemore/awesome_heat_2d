@@ -3,6 +3,19 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
 print("2D heat equation solver")
+
+
+def calculate(u, gamma, max_iter_time, plate_length, delta_x):
+    u = u.copy()
+    for k in range(0, max_iter_time - 1, 1):
+        for i in range(1, plate_length - 1, delta_x):
+            for j in range(1, plate_length - 1, delta_x):
+                u[k + 1, i, j] = gamma * (
+                            u[k, i + 1, j] + u[k, i - 1, j] + u[k, i, j + 1] + u[k, i, j - 1] - 4 * u[k, i, j]) + u[
+                                     k, i, j]
+    return u
+
+
 if __name__ == '__main__':
     plate_length = 100
     max_iter_time = 750
@@ -34,15 +47,6 @@ if __name__ == '__main__':
     u[:, :1, 1:] = u_bottom
     u[:, :, (plate_length-1):] = u_right
 
-    def calculate(u):
-        for k in range(0, max_iter_time-1, 1):
-            for i in range(1, plate_length-1, delta_x):
-                for j in range(1, plate_length-1, delta_x):
-                    #u[k + 1, i, j] = gamma * (u[k][i+1][j] + u[k][i-1][j] + u[k][i][j+1] + u[k][i][j-1] - 4*u[k][i][j]) + u[k][i][j]
-                    u[k + 1, i, j] = gamma * (u[k,i+1,j] + u[k,i-1,j] + u[k,i,j+1] + u[k,i,j-1] - 4*u[k,i,j]) + u[k,i,j]
-
-        return u
-
     def plotheatmap(u_k, k):
         # Clear the current plot figure
         plt.clf()
@@ -58,7 +62,7 @@ if __name__ == '__main__':
         return plt
 
     # Do the calculation here
-    u = calculate(u)
+    u = calculate(u, gamma, max_iter_time, plate_length, delta_x)
 
     def animate(k):
         plotheatmap(u[k], k)
